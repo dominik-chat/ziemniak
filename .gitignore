@@ -1,0 +1,21 @@
+# Object files
+*.o
+*.elf
+*.a
+
+# Linker output
+*.map
+
+# Executables
+*.bin
+*.BIN
+*.bsf
+*.sys
+*.SYS
+
+# Debug
+*.bxrc
+bochsrc.txt
+
+# Output
+*.iso
