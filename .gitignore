@@ -14,8 +14,8 @@
 *.SYS
 
 # Debug
-*.bxrc
-bochsrc.txt
+bochs*
 
 # Output
 *.iso
+/build
