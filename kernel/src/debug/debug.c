@@ -17,15 +17,13 @@
  * along with Ziemniak. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _CONFIG_H_
-#define _CONFIG_H_
+#include <stddef.h>
+#include <stdint.h>
+#include "debug/debug.h"
+#include "defs.h"
 
-#define DEBUG
-/*
- * 0 - error only
- * 1 - 0 + warning
- * 2 - 1 + info
- */
-#define DEBUG_LVL 2
 
-#endif /* _CONFIG_H_ */
+void log_info(char *msg)
+{
+	UNUSED(msg);
+}

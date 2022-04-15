@@ -17,15 +17,16 @@
  * along with Ziemniak. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _CONFIG_H_
-#define _CONFIG_H_
+#ifndef _DEBUG_H_
+#define _DEBUG_H_
 
-#define DEBUG
-/*
- * 0 - error only
- * 1 - 0 + warning
- * 2 - 1 + info
+/**
+ * @brief Print debug info message.
+ *
+ * Print info message via initialized debug interface.
+ *
+ * @param msg Message to print.
  */
-#define DEBUG_LVL 2
+void debug_info(char *msg);
 
-#endif /* _CONFIG_H_ */
+#endif /* _DEBUG_H_ */

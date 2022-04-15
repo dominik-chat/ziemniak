@@ -47,6 +47,7 @@ end:
 
 clean:
 	@cd bootloader && $(MAKE) clean
+	@cd kernel && $(MAKE) clean
 	@rm -rf $(BUILD_DIR)
 	@rm -rf $(ISO_DIR)
 	@rm -rf *.iso
