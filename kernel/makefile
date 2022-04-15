@@ -47,8 +47,7 @@ CC = x86_64-elf-gcc
 
 LDFLAGS = \
 	-O2 \
-	-lgcc \
-	--gc-sections
+	-lgcc
 LDFILE = linker.ld
 OBJ = $(ASMOBJ) $(COBJ)
 LGCC =$(dir $(shell $(CC) $(CFLAGS) -print-libgcc-file-name))

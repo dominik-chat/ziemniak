@@ -17,11 +17,27 @@
  * along with Ziemniak. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "debug/debug.h"
-#include "defs.h"
+#ifndef _DEBUG_H_
+#define _DEBUG_H_
+
+#include <stddef.h>
 
 
-void log_info(char *msg)
-{
-	UNUSED(msg);
-}
+typedef void (*serial_rx_t)(void);
+
+
+/**
+ * @brief Initialize serial port.
+ *
+ * Initialize serial port in blocking (tx) mode.
+ *
+ * @param id Number of serial port to initialize.
+ * @param rx_cb Callback to serial receive event.
+ *
+ * @retval 0 Success.
+ * @retval EIO Port not present.
+ * @retval EINVAL Invalid argument.
+ */
+int serial_init(size_t id, serial_rx_t rx_cb);
+
+#endif /* _DEBUG_H_ */

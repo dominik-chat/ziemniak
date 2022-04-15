@@ -17,11 +17,10 @@
  * along with Ziemniak. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "debug/debug.h"
-#include "defs.h"
+#ifndef _ERRNO_H_
+#define _ERRNO_H_
 
+#define EIO	1
+#define EINVAL	2
 
-void log_info(char *msg)
-{
-	UNUSED(msg);
-}
+#endif

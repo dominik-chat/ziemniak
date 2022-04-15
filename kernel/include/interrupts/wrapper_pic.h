@@ -17,11 +17,25 @@
  * along with Ziemniak. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "debug/debug.h"
-#include "defs.h"
+#ifndef _WRAPPER_PIC_H_
+#define _WRAPPER_PIC_H_
 
 
-void log_info(char *msg)
-{
-	UNUSED(msg);
-}
+void isr_wrapper_pic_0(void);
+void isr_wrapper_pic_1(void);
+void isr_wrapper_pic_2(void);
+void isr_wrapper_pic_3(void);
+void isr_wrapper_pic_4(void);
+void isr_wrapper_pic_5(void);
+void isr_wrapper_pic_6(void);
+void isr_wrapper_pic_7(void);
+void isr_wrapper_pic_8(void);
+void isr_wrapper_pic_9(void);
+void isr_wrapper_pic_10(void);
+void isr_wrapper_pic_11(void);
+void isr_wrapper_pic_12(void);
+void isr_wrapper_pic_13(void);
+void isr_wrapper_pic_14(void);
+void isr_wrapper_pic_15(void);
+
+#endif /* _WRAPPER_PIC_H_ */

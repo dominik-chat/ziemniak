@@ -19,6 +19,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include "interrupts/interrupts.h"
 #include "defs.h"
 
 
@@ -46,6 +47,8 @@ static volatile uint32_t *vmem;
 void main(struct long_mode_data *lm_data)
 {
 	size_t i;
+
+	interrupts_init();
 
 	vmem = lm_data->framebuf_ptr;
 

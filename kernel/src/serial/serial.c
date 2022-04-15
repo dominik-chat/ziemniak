@@ -17,11 +17,13 @@
  * along with Ziemniak. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "debug/debug.h"
+#include "serial/serial.h"
 #include "defs.h"
 
 
-void log_info(char *msg)
+int serial_init(size_t id, serial_rx_t rx_cb)
 {
-	UNUSED(msg);
+	UNUSED(id);
+	UNUSED (rx_cb);
+	return 0;
 }

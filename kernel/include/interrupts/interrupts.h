@@ -17,11 +17,18 @@
  * along with Ziemniak. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "debug/debug.h"
-#include "defs.h"
+#ifndef _INTERRUPTS_H_
+#define _INTERRUPTS_H_
 
 
-void log_info(char *msg)
-{
-	UNUSED(msg);
-}
+/**
+ * @brief Initialize interrupts.
+ *
+ * Initialize interrupts in PIC mode.
+ * Remap PIC to 0x20.
+ *
+ * @retval 0 Success.
+ */
+int interrupts_init(void);
+
+#endif /* _INTERRUPTS_H_ */

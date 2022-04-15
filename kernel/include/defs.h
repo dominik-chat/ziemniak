@@ -25,6 +25,7 @@
 
 #define UNUSED(x)	(void)(x)
 #define UINT_TO_PTR(x)	((void *)(x))
+#define PTR_TO_UINT(x)	((uint64_t)(x))
 #define PAGE_UP(x)	(((x)+4095ull)&0xFFFFFFFFFFFFF000ull)
 #define PAGE_CNT(x)	(PAGE_UP(x)/PAGE_SIZE)
 #define BLOCK_UP(x)	(((x)+2097151ull)&0xFFFFFFFFFFE00000ull)

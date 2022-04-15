@@ -18,4 +18,4 @@ bochs*
 
 # Output
 *.iso
-/build
+build*/
