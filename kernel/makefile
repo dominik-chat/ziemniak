@@ -75,7 +75,6 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.asm
 	@$(COPY) -O binary $(BUILD_DIR)/$< $(BUILD_DIR)/$@
 
 prepare:
-	@echo $(LGCC)
 	@mkdir -p $(dir $(OBJ))
 	@echo -e "\e[33m\e[1mBuilding $(PRJ) module\e[0m"
 

@@ -40,4 +40,6 @@ typedef void (*serial_rx_t)(void);
  */
 int serial_init(size_t id, serial_rx_t rx_cb);
 
+int serial_print(size_t id, const char *text);
+
 #endif /* _DEBUG_H_ */

@@ -17,11 +17,56 @@
  * along with Ziemniak. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "serial/serial.h"
 #include "debug/debug.h"
 #include "defs.h"
 
 
-void log_info(char *msg)
+int debug_init(void)
+{
+	return serial_init(0, NULL);
+}
+
+#ifdef DEBUG
+static void print_msg(const char *header, const char *msg)
+{
+	serial_print(0, header);
+	serial_print(0, msg);
+	serial_print(0, "\n");
+}
+
+void debug_info(const char *msg)
+{
+	print_msg("INFO: ", msg);
+}
+
+void debug_warn(const char *msg)
+{
+	print_msg("WARN: ", msg);
+}
+
+void debug_err(const char *msg)
+{
+	print_msg("ERR: ", msg);
+}
+#else /* DEBUG */
+void debug_info(const char *msg)
 {
 	UNUSED(msg);
+}
+
+void debug_warn(const char *msg)
+{
+	UNUSED(msg);
+}
+
+void debug_err(const char *msg)
+{
+	UNUSED(msg);
+}
+#endif /* DEBUG */
+
+void debug_crash(int excep)
+{
+	UNUSED(excep);
 }

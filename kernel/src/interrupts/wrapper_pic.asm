@@ -27,9 +27,11 @@ global isr_wrap_pic_table
 extern isr_%+%1
 global isr_wrapper_pic_%+%1
 isr_wrapper_pic_%+%1:
+	push rax
 	call isr_%+%1
 	mov al, 0x20
 	out 0x20, al
+	pop rax
 	iretq
 %endmacro
 
@@ -37,10 +39,12 @@ isr_wrapper_pic_%+%1:
 extern isr_%+%1
 global isr_wrapper_pic_%+%1
 isr_wrapper_pic_%+%1:
+	push rax
 	call isr_%+%1
 	mov al, 0x20
 	out 0xA0, al
 	out 0x20, al
+	pop rax
 	iretq
 %endmacro
 

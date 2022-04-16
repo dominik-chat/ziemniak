@@ -80,7 +80,6 @@ init_gdt:
 	mov ss, ax
 	mov fs, ax
 	mov gs, ax
-	jmp far [call_addr]
 
 call_main:
 	pop rdi
@@ -97,13 +96,7 @@ tss:
 	times 0x66 db 0
 	dw 0x68
 
-[SECTION .rodata]
-align 8
-call_addr:
-	dq call_main
-	dw 0x08
-
-align 8
+align 2
 gdtr:
 	dw gdt_end-gdt_null-1
 	dq gdt_null
@@ -112,7 +105,7 @@ gdt_null:
 	dq 0x0000000000000000
 
 gdt_code:
-	dq 0x0020980000000000
+	dq 0x00209A0000000000
 
 gdt_data:
 	dq 0x0000920000000000
@@ -120,7 +113,7 @@ gdt_data:
 gdt_tss:
 	dw 0x00000068
 basel:	dw 0x0000
-baseh: dd 0x11008900
+baseh:	dd 0x11008900
 	dd 0xFFFFFFFF
 	dd 0x00000000
 

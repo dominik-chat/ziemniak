@@ -15,6 +15,7 @@
 
 # Debug
 bochs*
+serial.txt
 
 # Output
 *.iso

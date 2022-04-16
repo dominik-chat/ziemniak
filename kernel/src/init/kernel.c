@@ -20,6 +20,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "interrupts/interrupts.h"
+#include "debug/debug.h"
 #include "defs.h"
 
 
@@ -49,6 +50,9 @@ void main(struct long_mode_data *lm_data)
 	size_t i;
 
 	interrupts_init();
+	debug_init();
+
+	debug_info("Kernel started");
 
 	vmem = lm_data->framebuf_ptr;
 

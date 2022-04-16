@@ -20,6 +20,18 @@
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
+
+/**
+ * @brief Initialize debug interface.
+ *
+ * Initialize serial port 0.
+ *
+ * @retval 0 Success.
+ * @retval EIO Port not present.
+ * @retval EINVAL Invalid argument in function.
+ */
+int debug_init(void);
+
 /**
  * @brief Print debug info message.
  *
@@ -27,6 +39,24 @@
  *
  * @param msg Message to print.
  */
-void debug_info(char *msg);
+void debug_info(const char *msg);
+
+/**
+ * @brief Print debug info message.
+ *
+ * Print warning message via initialized debug interface.
+ *
+ * @param msg Message to print.
+ */
+void debug_warn(const char *msg);
+
+/**
+ * @brief Print debug info message.
+ *
+ * Print error message via initialized debug interface.
+ *
+ * @param msg Message to print.
+ */
+void debug_err(const char *msg);
 
 #endif /* _DEBUG_H_ */
