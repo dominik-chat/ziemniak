@@ -17,21 +17,17 @@
  * along with Ziemniak. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _DEFS_H_
-#define _DEFS_H_
+#ifndef _MM_H_
+#define _MM_H_
 
-#define __packed	__attribute__((packed))
-#define __align(x)	__attribute__ ((aligned (x)))
+#include <stdint.h>
+#include <stddef.h>
 
-#define UNUSED(x)	(void)(x)
-#define UINT_TO_PTR(x)	((void *)(x))
-#define PTR_TO_UINT(x)	((uint64_t)(x))
-#define PAGE_UP(x)	(((x)+4095ull)&0xFFFFFFFFFFFFF000ull)
-#define PAGE_DOWN(x)	((x)&0xFFFFFFFFFFFFF000ull)
-#define PAGE_CNT(x)	(PAGE_UP(x)/PAGE_SIZE)
-#define BLOCK_UP(x)	(((x)+2097151ull)&0xFFFFFFFFFFE00000ull)
-#define BLOCK_DOWN(x)	((x)&0xFFFFFFFFFFE00000ull)
-#define BLOCK_SIZE	2097152ull
-#define PAGE_SIZE	4096ull
 
-#endif /* _DEFS_H_ */
+void mm_init(void *peek_entry);
+
+int mm_peek(void **virt, void *phys, size_t size);
+
+void mm_set_cr3(void *pml4, uint64_t flags);
+
+#endif /* _MM_H_ */

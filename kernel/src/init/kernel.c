@@ -20,6 +20,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "interrupts/interrupts.h"
+#include "memory/mm.h"
 #include "debug/debug.h"
 #include "defs.h"
 
@@ -29,6 +30,8 @@ __packed struct long_mode_data
 	void		*framebuf_ptr;
 	void		*font_ptr;
 	void		*memmap_ptr;
+	void		*load_buf;
+	void		*peek_entry;
 	uint16_t	memmap_size;
 	uint16_t	scr_width;
 	uint16_t	scr_height;
@@ -51,12 +54,14 @@ void main(struct long_mode_data *lm_data)
 
 	interrupts_init();
 	debug_init();
+	mm_init(lm_data->peek_entry);
 
 	debug_info("Kernel started");
 
-	vmem = lm_data->framebuf_ptr;
+	mm_peek((void **)&vmem, lm_data->framebuf_ptr,
+				lm_data->scr_width * lm_data->scr_height * 4);
 
-	for (i = 0; i < (lm_data->scr_height * lm_data->scr_width); i++) {
+	for (i = 0; i < lm_data->scr_width * lm_data->scr_height; i++) {
 		vmem[i] = 0x12345678;
 	}
 

@@ -22,6 +22,7 @@
 #include "interrupts/interrupts.h"
 #include "interrupts/wrapper_exc.h"
 #include "interrupts/wrapper_pic.h"
+#include "debug/debug.h"
 #include "defs.h"
 #include "asm.h"
 
@@ -113,7 +114,8 @@ int interrupts_init(void)
 
 void exception_handler(int number)
 {
-	UNUSED(number);
+	debug_crash(number);
+
 	while(1) {
 	}
 }

@@ -69,4 +69,5 @@ void debug_err(const char *msg)
 void debug_crash(int excep)
 {
 	UNUSED(excep);
+	serial_print(0, "CRASH");
 }

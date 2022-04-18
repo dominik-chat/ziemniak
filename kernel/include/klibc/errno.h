@@ -23,5 +23,6 @@
 #define EIO	1
 #define EINVAL	2
 #define EPERM	3
+#define ENOTSUP	4
 
 #endif

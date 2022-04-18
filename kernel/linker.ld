@@ -19,7 +19,7 @@
 
 ENTRY(_start);
 
-_stacksize = 64K;
+_stacksize = 16K;
 
 MEMORY
 {

@@ -59,4 +59,13 @@ void debug_warn(const char *msg);
  */
 void debug_err(const char *msg);
 
+/**
+ * @brief Print debug crash message.
+ *
+ * Print crash message via initialized debug interface.
+ *
+ * @param excep Exception number.
+ */
+void debug_crash(int excep);
+
 #endif /* _DEBUG_H_ */

@@ -26,6 +26,17 @@
 
 #define FREE_RAM	0x01
 
+#define PML4E	0
+#define PDPE_T	1
+#define PDPE_M	2
+#define PDPE_B	3
+#define PDE_KER	4
+#define PDE_STA	5
+#define PDE_MID	6
+#define PDE_LOW	7
+#define PTE_KER	8
+#define PTE_STA	9
+
 
 __packed struct real_mode_data
 {
@@ -50,6 +61,8 @@ __packed struct long_mode_data
 	uint64_t	framebuf_ptr;
 	uint64_t	font_ptr;
 	uint64_t	memmap_ptr;
+	uint64_t	load_buf;
+	uint64_t	peek_entry;
 	uint16_t	memmap_size;
 	uint16_t	scr_width;
 	uint16_t	scr_height;
@@ -193,7 +206,6 @@ void main()
 	uint32_t load_size;
 	uint32_t load_size_sec;
 	uint32_t total_size;
-	uint32_t vmem_size;
 	uint32_t i;
 
 	uint64_t buf;
@@ -242,7 +254,7 @@ void main()
 	print_header(header);
 
 	total_size = header->ebss - header->stext + header->stack_size;
-	total_size += 8 * PAGE_SIZE;
+	total_size += 10 * PAGE_SIZE;
 
 	video_print("Total required memory size for kernel :");
 	video_print_hex(total_size, 8);
@@ -273,12 +285,10 @@ void main()
 	load_buf = buf;
 	buf += PAGE_UP(header->ebss - header->stext);
 	pages = buf;
-	buf += 8 * PAGE_SIZE;
+	buf += 10 * PAGE_SIZE;
 	stack = buf;
 	buf += header->stack_size;
 	vmem = BLOCK_UP(header->ebss);
-	vmem_size = BLOCK_UP(rm_data.scr_width * rm_data.scr_height * 4) /
-								BLOCK_SIZE;
 
 	video_print("Video memory pointer : ");
 	video_print_hex(vmem, 0);
@@ -301,34 +311,31 @@ void main()
 	}
 
 	page_tab = (struct page(*)[512])(uint32_t)pages;
+
 	/* PML4E */
-	page_tab[0][511] = gen_pml4e_pdpe_pte(&page_tab[1][0]);
-	page_tab[0][0] = gen_pml4e_pdpe_pte(&page_tab[6][0]);
+	page_tab[PML4E][511] = gen_pml4e_pdpe_pte(&page_tab[PDPE_T][0]);
+	page_tab[0][256] = gen_pml4e_pdpe_pte(&page_tab[PDPE_M][0]);
+	page_tab[PML4E][0] = gen_pml4e_pdpe_pte(&page_tab[PDPE_B][0]);
 
 	/* PDPE */
-	page_tab[1][510] = gen_pml4e_pdpe_pte(&page_tab[2][0]);
-	page_tab[1][511] = gen_pml4e_pdpe_pte(&page_tab[3][0]);
-	page_tab[6][0] = gen_pml4e_pdpe_pte(&page_tab[7][0]);
+	page_tab[PDPE_T][510] = gen_pml4e_pdpe_pte(&page_tab[PDE_KER][0]);
+	page_tab[PDPE_T][511] = gen_pml4e_pdpe_pte(&page_tab[PDE_STA][0]);
+	page_tab[PDPE_M][0] = gen_pml4e_pdpe_pte(&page_tab[PDE_MID][0]);
+	page_tab[PDPE_B][0] = gen_pml4e_pdpe_pte(&page_tab[PDE_LOW][0]);
 
-	/* PDE kernel, vmem (0xFFFFFFFF80000000), lowmem */
-	page_tab[2][0] = gen_pde(&page_tab[4][0], 0);
-	for (i = 0; i < vmem_size; i++) {
-		tmp = UINT_TO_PTR(rm_data.framebuf_ptr + (i * BLOCK_SIZE));
-		page_tab[2][i + 1] = gen_pde(tmp, 1);
-	}
-
-	/* PDE lowmem, stack (memory top) */
-	page_tab[7][0] = gen_pde(UINT_TO_PTR(0), 1);
-	page_tab[3][511] = gen_pde(&page_tab[5][0], 0);
+	/* PDE */
+	page_tab[PDE_KER][0] = gen_pde(&page_tab[PTE_KER][0], 0);
+	page_tab[PDE_LOW][0] = gen_pde(UINT_TO_PTR(0), 1);
+	page_tab[PDE_STA][511] = gen_pde(&page_tab[PTE_STA][0], 0);
 
 	/* PTE kernel + stack */
 	for (i = 0; i < PAGE_CNT(pages - load_buf); i++) {
 		tmp = UINT_TO_PTR((uint32_t)load_buf + (i * PAGE_SIZE));
-		page_tab[4][i] = gen_pml4e_pdpe_pte(tmp);
+		page_tab[PTE_KER][i] = gen_pml4e_pdpe_pte(tmp);
 	}
 	for (i = 511; i > 511 - PAGE_CNT(header->stack_size); i--) {
 		tmp = UINT_TO_PTR((uint32_t)buf - ((511 - i) * PAGE_SIZE));
-		page_tab[5][i] = gen_pml4e_pdpe_pte(tmp);
+		page_tab[PTE_STA][i] = gen_pml4e_pdpe_pte(tmp);
 	}
 
 	load_size_sec = ((load_size + CD_SECTOR_SIZE - 1) / CD_SECTOR_SIZE);
@@ -340,9 +347,11 @@ void main()
 		(uint16_t *)((uint32_t)load_buf + (i * CD_SECTOR_SIZE)));
 	}
 
-	lm_data.framebuf_ptr = 0xFFFFFFFF80200000;
+	lm_data.framebuf_ptr = rm_data.framebuf_ptr;
 	lm_data.font_ptr = rm_data.font_ptr;
 	lm_data.memmap_ptr = (uint32_t)mem_map;
+	lm_data.load_buf = load_buf;
+	lm_data.peek_entry = (uint32_t)&page_tab[PDE_MID][0];
 	lm_data.memmap_size = rm_data.memmap_size;
 	lm_data.scr_width = rm_data.scr_width;
 	lm_data.scr_height = rm_data.scr_height;

@@ -56,6 +56,16 @@ static inline void sti(void)
 	asm volatile ("sti");
 }
 
+static inline void invlpg(void *mem)
+{
+    asm volatile ("invlpg (%0)" : : "b"(mem) : "memory");
+}
+
+static inline void set_cr3(uint64_t val)
+{
+    asm volatile ("mov %0, %%cr3" : "=r"(val));
+}
+
 static inline void lidt(void *idt, uint16_t len)
 {
 	struct {
