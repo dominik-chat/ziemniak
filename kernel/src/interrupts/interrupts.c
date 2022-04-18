@@ -112,9 +112,9 @@ int interrupts_init(void)
 	return 0;
 }
 
-void exception_handler(int number)
+void exception_handler(uint64_t number, void *dump)
 {
-	debug_crash(number);
+	debug_crash(number, dump);
 
 	while(1) {
 	}

@@ -65,7 +65,8 @@ void debug_err(const char *msg);
  * Print crash message via initialized debug interface.
  *
  * @param excep Exception number.
+ * @param dump Pointer to dumped core data.
  */
-void debug_crash(int excep);
+void debug_crash(int excep, void *dump);
 
 #endif /* _DEBUG_H_ */

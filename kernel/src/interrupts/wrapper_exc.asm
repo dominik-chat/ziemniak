@@ -22,11 +22,38 @@
 extern exception_handler
 global isr_wrap_pic_table
 
+%macro pushaq 0
+push rax
+push rbx
+push rcx
+push rdx
+push rsi
+push rdi
+push rbp
+push r8
+push r9
+push r10
+push r11
+push r12
+push r13
+push r14
+push r15
+%endmacro
 
 %macro exc_wrap_err 1
 global exc_wrapper_%+%1
 exc_wrapper_%+%1:
+	pushaq
+	mov rax, cr0
+	push rax
+	mov rax, cr2
+	push rax
+	mov rax, cr3
+	push rax
+	mov rax, cr4
+	push rax
 	mov rdi, %1
+	mov rsi, rsp
 	call exception_handler
 	iretq
 %endmacro
@@ -34,7 +61,18 @@ exc_wrapper_%+%1:
 %macro exc_wrap_no_err 1
 global exc_wrapper_%+%1
 exc_wrapper_%+%1:
+	push qword 0
+	pushaq
+	mov rax, cr0
+	push rax
+	mov rax, cr2
+	push rax
+	mov rax, cr3
+	push rax
+	mov rax, cr4
+	push rax
 	mov rdi, %1
+	mov rsi, rsp
 	call exception_handler
 	iretq
 %endmacro

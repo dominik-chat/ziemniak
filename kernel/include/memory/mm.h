@@ -24,10 +24,39 @@
 #include <stddef.h>
 
 
+/**
+ * @brief Initialize memory manager.
+ *
+ * Initialize memory manager.
+ *
+ * @param peek_entry Pointer to PTE entry used for peeking.
+ */
 void mm_init(void *peek_entry);
 
+/**
+ * @brief Peek memory.
+ *
+ * Map physical memory to virtual memory with a given size.
+ * Maximum size is 1GB.
+ *
+ * @param virt Pointer to a pointer to save virtual memory address.
+ * @param phys Pointer to requested physical memory.
+ * @param size Size of requested peek.
+ *
+ * @retval EPERM MM not initialized.
+ * @retval EINVAL Invalid input arguments.
+ * @retval ENOTSUP Size too big or out of bounds.
+ */
 int mm_peek(void **virt, void *phys, size_t size);
 
+/**
+ * @brief Generate cr3 value and set it.
+ *
+ * Generate cr3 value with given parameters and set it.
+ *
+ * @param pml4 Physical pointer to pml4.
+ * @param flags Flags for cr3.
+ */
 void mm_set_cr3(void *pml4, uint64_t flags);
 
 #endif /* _MM_H_ */
