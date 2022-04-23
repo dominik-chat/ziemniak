@@ -60,6 +60,15 @@ void debug_warn(const char *msg);
 void debug_err(const char *msg);
 
 /**
+ * @brief Print debug number as hex.
+ *
+ * Print hexadecimal representation of a number.
+ *
+ * @param num Number to print.
+ */
+void debug_num(uint64_t num);
+
+/**
  * @brief Print debug crash message.
  *
  * Print crash message via initialized debug interface.

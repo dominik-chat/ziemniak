@@ -31,6 +31,7 @@ __packed struct long_mode_data
 	void		*font_ptr;
 	void		*memmap_ptr;
 	void		*load_buf;
+	void		*load_end;
 	void		*peek_entry;
 	uint16_t	memmap_size;
 	uint16_t	scr_width;
@@ -54,7 +55,8 @@ void main(struct long_mode_data *lm_data)
 
 	interrupts_init();
 	debug_init();
-	mm_init(lm_data->peek_entry);
+	mm_init(lm_data->peek_entry, lm_data->memmap_ptr, lm_data->memmap_size,
+					lm_data->load_buf, lm_data->load_end);
 
 	debug_info("Kernel started");
 

@@ -134,6 +134,12 @@ void debug_err(const char *msg)
 {
 	print_msg("ERR: ", msg);
 }
+
+void debug_num(uint64_t num)
+{
+	serial_print(0, hex(num));
+	serial_print(0, "\n");
+}
 #else /* DEBUG */
 void debug_info(const char *msg)
 {
@@ -148,6 +154,11 @@ void debug_warn(const char *msg)
 void debug_err(const char *msg)
 {
 	UNUSED(msg);
+}
+
+void debug_num(uint64_t num)
+{
+	UNUSED(num);
 }
 #endif /* DEBUG */
 

@@ -30,8 +30,16 @@
  * Initialize memory manager.
  *
  * @param peek_entry Pointer to PTE entry used for peeking.
+ * @param memmap Pointer to memory map by e820.
+ * @param memmap_size Size of memmap (number of entries).
+ * @param load_buf Pointer to kernel load buffer.
+ * @param load_end Pointer to end of load buffer.
  */
-void mm_init(void *peek_entry);
+void mm_init(void *peek_entry,
+	     void *memmap,
+	     size_t memmap_size,
+	     void *load_buf,
+	     void *load_end);
 
 /**
  * @brief Peek memory.

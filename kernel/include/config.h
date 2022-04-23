@@ -28,4 +28,7 @@
  */
 #define DEBUG_LVL 2
 
+#define ZIEMNIAK_VERSION_MAJOR 0
+#define ZIEMNIAK_VERSION_MINOR 1
+
 #endif /* _CONFIG_H_ */

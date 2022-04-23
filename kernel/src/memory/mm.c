@@ -20,6 +20,7 @@
 #include <stdbool.h>
 #include "memory/mm.h"
 #include "klibc/errno.h"
+#include "debug/debug.h"
 #include "defs.h"
 #include "asm.h"
 
@@ -37,6 +38,12 @@
 #define PCD		(1ul << 4)
 #define PWT		(1ul << 3)
 
+#define FREE_RAM	1
+#define RSRVD_RAM	2
+#define ACPI_RAM	3
+#define NVS_RAM		4
+#define BAD_RAM		5
+
 
 struct page_entry
 {
@@ -46,6 +53,15 @@ struct page_entry
 	uint64_t avl1	:	11;
 	uint64_t nx	:	1;
 };
+
+__packed struct memmap
+{
+	uint64_t base;
+	uint64_t len;
+	uint32_t type;
+	uint32_t attrs;
+};
+
 
 static struct page_entry *peek_pde;
 
@@ -83,9 +99,44 @@ static struct page_entry gen_pte(const void *addr, bool nx, uint16_t flags)
 }
 
 
-void mm_init(void *peek_entry)
+void mm_init(void *peek_entry,
+	     void *memmap,
+	     size_t memmap_size,
+	     void *load_buf,
+	     void *load_end)
 {
+	size_t i;
+	size_t valid_cnt;
+	struct memmap *map;
+	uint64_t max;
+
 	peek_pde = peek_entry;
+	map = memmap;
+	max = 0;
+
+	load_end = PAGE_UP_PTR(load_end);
+
+	valid_cnt = 0;
+	for (i = 0; i < memmap_size; i++) {
+		map[i].len = PAGE_DOWN(map[i].base + map[i].len);
+		map[i].base = PAGE_UP(map[i].base);
+		map[i].len = map[i].len - map[i].base;
+
+		if ((map[i].type == FREE_RAM) && (map[i].base >= 0x100000)) {
+			valid_cnt++;
+			debug_info("Base");
+			debug_num(map[i].base);
+			debug_info("Length");
+			debug_num(map[i].len);
+		}
+
+		if ((map[i].base + map[i].len) > max) {
+			max = (map[i].base + map[i].len);
+		}
+	}
+
+	debug_info("Max address");
+	debug_num(max);
 }
 
 int mm_peek(void **virt, void *phys, size_t size)

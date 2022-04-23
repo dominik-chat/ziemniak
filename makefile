@@ -40,7 +40,7 @@ cd:
 	@mkdir -p $(ISO_DIR)/boot
 	@cp $(BUILD_DIR)/stage1.bin $(ISO_DIR)/boot/stage1.bin
 	@cp $(BUILD_DIR)/potato.bin $(ISO_DIR)/potato.bin
-	@mkisofs -V "Ziemniak OS" -R -J -b boot/stage1.bin -G $(BUILD_DIR)/stage2.bin -no-emul-boot -boot-load-size 4 -o ./bootable.iso ./$(ISO_DIR)
+	@mkisofs -V "Ziemniak OS" -R -J --quiet -b boot/stage1.bin -G $(BUILD_DIR)/stage2.bin -no-emul-boot -boot-load-size 4 -o ./bootable.iso ./$(ISO_DIR)
 
 end:
 	@echo -e "\e[33m\e[1m$(PRJ) built successfully\e[0m"

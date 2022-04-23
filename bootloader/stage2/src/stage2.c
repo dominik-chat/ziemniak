@@ -62,6 +62,7 @@ __packed struct long_mode_data
 	uint64_t	font_ptr;
 	uint64_t	memmap_ptr;
 	uint64_t	load_buf;
+	uint64_t	load_end;
 	uint64_t	peek_entry;
 	uint16_t	memmap_size;
 	uint16_t	scr_width;
@@ -209,7 +210,6 @@ void main()
 	uint32_t i;
 
 	uint64_t buf;
-	uint64_t vmem;
 	uint64_t load_buf;
 	uint64_t pages;
 	uint64_t stack;
@@ -288,11 +288,7 @@ void main()
 	buf += 10 * PAGE_SIZE;
 	stack = buf;
 	buf += header->stack_size;
-	vmem = BLOCK_UP(header->ebss);
 
-	video_print("Video memory pointer : ");
-	video_print_hex(vmem, 0);
-	video_print("\n");
 	video_print("Kernel pointer : ");
 	video_print_hex(load_buf, 0);
 	video_print("\n");
@@ -314,7 +310,7 @@ void main()
 
 	/* PML4E */
 	page_tab[PML4E][511] = gen_pml4e_pdpe_pte(&page_tab[PDPE_T][0]);
-	page_tab[0][256] = gen_pml4e_pdpe_pte(&page_tab[PDPE_M][0]);
+	page_tab[PML4E][256] = gen_pml4e_pdpe_pte(&page_tab[PDPE_M][0]);
 	page_tab[PML4E][0] = gen_pml4e_pdpe_pte(&page_tab[PDPE_B][0]);
 
 	/* PDPE */
@@ -351,6 +347,7 @@ void main()
 	lm_data.font_ptr = rm_data.font_ptr;
 	lm_data.memmap_ptr = (uint32_t)mem_map;
 	lm_data.load_buf = load_buf;
+	lm_data.load_end = buf;
 	lm_data.peek_entry = (uint32_t)&page_tab[PDE_MID][0];
 	lm_data.memmap_size = rm_data.memmap_size;
 	lm_data.scr_width = rm_data.scr_width;
