@@ -64,7 +64,7 @@ void main(struct long_mode_data *lm_data)
 				lm_data->scr_width * lm_data->scr_height * 4);
 
 	for (i = 0; i < lm_data->scr_width * lm_data->scr_height; i++) {
-		vmem[i] = 0x12345678;
+	//	vmem[i] = 0x12345678;
 	}
 
 	while(1) {

@@ -28,6 +28,7 @@
 #define PEEK_ADDR	0xFFFF800000000000
 #define M1GB		0x40000000
 #define ENTRY_CNT	512
+#define ENTRY_SIZE	sizeof(uint64_t)
 
 #define CR3_FLAG_MASK	(3ul << 3)
 #define CR3_ADDR_MASK	0x000FFFFFFFFFF000
@@ -57,10 +58,16 @@ struct page_entry
 __packed struct memmap
 {
 	uint64_t base;
+	union {
 	uint64_t len;
+	uint64_t end;
+	};
 	uint32_t type;
 	uint32_t attrs;
 };
+
+
+extern struct allocator_api bitmap_allocator;
 
 
 static struct page_entry *peek_pde;
@@ -107,6 +114,8 @@ void mm_init(void *peek_entry,
 {
 	size_t i;
 	size_t valid_cnt;
+	size_t load_size;
+	size_t free_mem;
 	struct memmap *map;
 	uint64_t max;
 
@@ -115,28 +124,32 @@ void mm_init(void *peek_entry,
 	max = 0;
 
 	load_end = PAGE_UP_PTR(load_end);
+	load_size = PTR_TO_UINT(load_end) - PTR_TO_UINT(load_buf);
 
 	valid_cnt = 0;
+	free_mem = 0;
 	for (i = 0; i < memmap_size; i++) {
-		map[i].len = PAGE_DOWN(map[i].base + map[i].len);
+		map[i].end = PAGE_DOWN(map[i].base + map[i].len);
 		map[i].base = PAGE_UP(map[i].base);
-		map[i].len = map[i].len - map[i].base;
+
+		if (map[i].base == PTR_TO_UINT(load_buf)) {
+			map[i].base += load_size;
+		}
 
 		if ((map[i].type == FREE_RAM) && (map[i].base >= 0x100000)) {
 			valid_cnt++;
-			debug_info("Base");
-			debug_num(map[i].base);
-			debug_info("Length");
-			debug_num(map[i].len);
+			free_mem += (map[i].end - map[i].base);
+			debug_num("Base: ", map[i].base);
+			debug_num("End: ", map[i].end);
 		}
 
-		if ((map[i].base + map[i].len) > max) {
-			max = (map[i].base + map[i].len);
+		if (map[i].end > max) {
+			max = map[i].end;
 		}
 	}
 
-	debug_info("Max address");
-	debug_num(max);
+	debug_num("Bitmap allocator requirements: ", bitmap_allocator.get_req(max));
+	debug_num("Max address: ", max);
 }
 
 int mm_peek(void **virt, void *phys, size_t size)

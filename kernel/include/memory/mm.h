@@ -23,6 +23,58 @@
 #include <stdint.h>
 #include <stddef.h>
 
+/**
+ * @typedef allocator_get_req_t
+ * @brief API for getting the allocators memory requirements.
+ *
+ * @param max_addr Maximum physical address.
+ *
+ * @retval Amount of memory to allocate for allocator (in bytes).
+ */
+typedef size_t (*allocator_get_req_t)(uint64_t max_addr);
+
+/**
+ * @typedef allocator_init_t
+ * @brief API for initializing the allocator.
+ *
+ * @param buf Memory buffer for the allocator.
+ *
+ * @retval 0 Initialization successful.
+ */
+typedef int (*allocator_init_t)(void *buf);
+
+/**
+ * @typedef allocator_alloc_t
+ * @brief API for requesting memory allocation.
+ *
+ * @param buf Pointer to allocated memory.
+ * @param len Size of allocation (in bytes).
+ *
+ * @retval 0 Allocation successful.
+ * @retval ENOMEM Out of memory.
+ */
+typedef int (*allocator_alloc_t)(void **buf, size_t len);
+
+/**
+ * @typedef allocator_free_t
+ * @brief API for initializing the allocator.
+ *
+ * @param buf Pointer to allocated memory.
+ * @param len Size of allocation (in bytes).
+ *
+ * @retval 0 Free successful.
+ * @retval EINVAL Invalid parameters.
+ */
+typedef int (*allocator_free_t)(void *buf, size_t len);
+
+
+struct allocator_api {
+	allocator_get_req_t get_req;
+	allocator_init_t init;
+	allocator_alloc_t alloc;
+	allocator_free_t free;
+};
+
 
 /**
  * @brief Initialize memory manager.

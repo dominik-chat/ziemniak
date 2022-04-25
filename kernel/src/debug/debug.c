@@ -135,10 +135,9 @@ void debug_err(const char *msg)
 	print_msg("ERR: ", msg);
 }
 
-void debug_num(uint64_t num)
+void debug_num(const char *msg, uint64_t num)
 {
-	serial_print(0, hex(num));
-	serial_print(0, "\n");
+	print_msg(msg, hex(num));
 }
 #else /* DEBUG */
 void debug_info(const char *msg)
@@ -156,7 +155,7 @@ void debug_err(const char *msg)
 	UNUSED(msg);
 }
 
-void debug_num(uint64_t num)
+void debug_num(const char *msg, uint64_t num)
 {
 	UNUSED(num);
 }
@@ -172,29 +171,29 @@ void debug_crash(uint64_t excep, void *dump)
 	if (excep < 32) {
 		print_msg(error_msg[excep], " EXCEPTION");
 	}
-	print_msg("ERROR CODE: ", hex(data->err));
-	print_msg("RAX: ", hex(data->rax));
-	print_msg("RBX: ", hex(data->rbx));
-	print_msg("RCX: ", hex(data->rcx));
-	print_msg("RDX: ", hex(data->rdx));
-	print_msg("RSP: ", hex(data->rsp));
-	print_msg("RBP: ", hex(data->rbp));
-	print_msg("RSI: ", hex(data->rsi));
-	print_msg("RDI: ", hex(data->rdi));
-	print_msg("R8: ", hex(data->r8));
-	print_msg("R9: ", hex(data->r9));
-	print_msg("R10: ", hex(data->r10));
-	print_msg("R11: ", hex(data->r11));
-	print_msg("R12: ", hex(data->r12));
-	print_msg("R13: ", hex(data->r13));
-	print_msg("R14: ", hex(data->r14));
-	print_msg("R15: ", hex(data->r15));
-	print_msg("RIP: ", hex(data->rip));
-	print_msg("RFLAGS: ", hex(data->rflags));
-	print_msg("CR0: ", hex(data->cr0));
-	print_msg("CR2: ", hex(data->cr2));
-	print_msg("CR3: ", hex(data->cr3));
-	print_msg("CR4: ", hex(data->cr4));
-	print_msg("CS: ", hex(data->cs));
-	print_msg("SS: ", hex(data->ss));
+	debug_num("ERROR CODE: ", data->err);
+	debug_num("RAX: ", data->rax);
+	debug_num("RBX: ", data->rbx);
+	debug_num("RCX: ", data->rcx);
+	debug_num("RDX: ", data->rdx);
+	debug_num("RSP: ", data->rsp);
+	debug_num("RBP: ", data->rbp);
+	debug_num("RSI: ", data->rsi);
+	debug_num("RDI: ", data->rdi);
+	debug_num("R8: ", data->r8);
+	debug_num("R9: ", data->r9);
+	debug_num("R10: ", data->r10);
+	debug_num("R11: ", data->r11);
+	debug_num("R12: ", data->r12);
+	debug_num("R13: ", data->r13);
+	debug_num("R14: ", data->r14);
+	debug_num("R15: ", data->r15);
+	debug_num("RIP: ", data->rip);
+	debug_num("RFLAGS: ", data->rflags);
+	debug_num("CR0: ", data->cr0);
+	debug_num("CR2: ", data->cr2);
+	debug_num("CR3: ", data->cr3);
+	debug_num("CR4: ", data->cr4);
+	debug_num("CS: ", data->cs);
+	debug_num("SS: ", data->ss);
 }

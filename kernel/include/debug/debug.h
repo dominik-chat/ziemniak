@@ -64,9 +64,10 @@ void debug_err(const char *msg);
  *
  * Print hexadecimal representation of a number.
  *
+ * @param msg Message to print before number.
  * @param num Number to print.
  */
-void debug_num(uint64_t num);
+void debug_num(const char *msg, uint64_t num);
 
 /**
  * @brief Print debug crash message.

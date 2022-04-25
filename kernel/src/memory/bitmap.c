@@ -17,13 +17,40 @@
  * along with Ziemniak. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _ERRNO_H_
-#define _ERRNO_H_
+#include "memory/mm.h"
+#include "klibc/errno.h"
+#include "defs.h"
 
-#define EIO	1
-#define EINVAL	2
-#define EPERM	3
-#define ENOTSUP	4
-#define ENOMEM	5
 
-#endif
+static size_t get_req(uint64_t max_addr)
+{
+	UNUSED(max_addr);
+	return 0;
+}
+
+static int init(void *buf)
+{
+	UNUSED(buf);
+	return 0;
+}
+
+static int alloc(void **buf, size_t len)
+{
+	UNUSED(buf);
+	UNUSED(len);
+	return 0;
+}
+
+static int free(void *buf, size_t len)
+{
+	UNUSED(buf);
+	UNUSED(len);
+	return 0;
+}
+
+struct allocator_api bitmap_allocator = {
+	.get_req = get_req,
+	.init = init,
+	.alloc = alloc,
+	.free = free
+};
