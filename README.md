@@ -1,5 +1,7 @@
 # Ziemniak
 
+<img src="/resources/ziemniak.png" alt="drawing" width="200"/>
+
 ![LICENSE](https://img.shields.io/github/license/dominik-chat/ziemniak?style=flat-square)
 ![LOC](https://img.shields.io/tokei/lines/github/dominik-chat/ziemniak?style=flat-square)
 
